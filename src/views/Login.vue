@@ -34,6 +34,7 @@
 										hint="Ít nhất 8 ký tự"
 										counter
 										@click:append="show1 = !show1"
+										@keyup.enter="validate"
 									></v-text-field>
 								</v-col>
 								<v-col class="d-flex" cols="12" sm="6" xsm="12">

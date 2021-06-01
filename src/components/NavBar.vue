@@ -14,10 +14,7 @@
 			<v-layout column align-center>
 				<v-flex class="mt-5">
 					<v-avatar size="100">
-						<img
-							:src="user.avatar"
-							alt="avatar"
-						/>
+						<img :src="user.avatar" alt="avatar" />
 					</v-avatar>
 					<p class="white--text subheading mt-1 text-center">
 						{{ user.username }}
@@ -40,6 +37,23 @@
 						<v-list-item-title>{{ link.text }}</v-list-item-title>
 					</v-list-item-content>
 				</v-list-item>
+				<v-list-item>
+					<v-list-item-action>
+						<v-icon>mdi-logout</v-icon>
+					</v-list-item-action>
+					<v-list-item-content>
+						<v-list-item-title>
+							<v-btn icon>
+								<a
+									id="logout"
+									href="javascript:void(0)"
+									@click="logout"
+									>Thoát
+								</a>
+							</v-btn>
+						</v-list-item-title>
+					</v-list-item-content>
+				</v-list-item>
 			</v-list>
 		</v-navigation-drawer>
 	</nav>
@@ -47,7 +61,7 @@
 <script>
 export default {
 	name: "NavBar",
-	props:["user"],
+	props: ["user"],
 	mounted() {
 		this.isMobile = window.innerWidth < 500 ? true : false;
 		window.addEventListener("resize", (ev) => {
@@ -65,8 +79,15 @@ export default {
 			},
 			{ icon: "mdi-door", text: "Phòng", route: "/room" },
 		],
-		isMobile: false
+		isMobile: false,
 	}),
+	methods: {
+		logout: function() {
+			this.$store.dispatch("logout").then(() => {
+				this.$router.push("/login");
+			});
+		},
+	},
 };
 </script>
 <style scoped>
@@ -77,5 +98,12 @@ export default {
 .colorr {
 	background-color: #51c4d3 !important;
 	color: #d8e3e7 !important;
+}
+#logout {
+	width: 35px;
+	height: 35px;
+	margin-top: 20px;
+	text-decoration: none;
+	color: black;
 }
 </style>
