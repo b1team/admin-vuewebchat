@@ -68,4 +68,12 @@ const router = new VueRouter({
 	routes,
 });
 
+const DEFAULT_TITLE = "B1Corp admin";
+// eslint-disable-next-line no-unused-vars
+router.afterEach((to, from) => {
+	Vue.nextTick(() => {
+		document.title = to.meta.title || DEFAULT_TITLE;
+	});
+});
+
 export default router;
