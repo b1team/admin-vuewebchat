@@ -1,9 +1,13 @@
 <template>
 	<div id="inspire">
 		<h1 style="padding: 10px;">Danh sách phòng</h1>
+		<div class="search-wrapper">
+			Tìm kiếm: 
+			<input type="text" v-model="search" placeholder="Tên người dùng" />
+		</div>
 		<v-data-table
 			:headers="headers"
-			:items="desserts"
+			:items="filterdesserts"
 			:items-per-page="10"
 			item-key="id"
 			class="elevation-1 t-color table"
@@ -32,7 +36,13 @@
 					mdi-eye
 				</v-icon>
 			</template>
+			<template v-slot:item.delete="{ item }">
+				<v-icon small class="mr-2" @click="deleteRoomInfo(item.id)">
+					mdi-delete
+				</v-icon>
+			</template>
 		</v-data-table>
+
 		<v-dialog v-model="dialog" width="500" id="inspire">
 			<v-card>
 				<v-card-title class="headline grey lighten-2">
@@ -41,9 +51,7 @@
 
 				<v-card-text>
 					<v-list dense>
-						<v-list-item-group
-							color="primary"
-						>
+						<v-list-item-group color="primary">
 							<v-list-item v-for="(item, i) in items" :key="i">
 								<v-list-item-icon>
 									<img
@@ -71,6 +79,29 @@
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
+
+		<v-dialog v-model="dialogDelete" max-width="290">
+			<v-card>
+				<v-card-title class="headline">
+					Bạn muốn xóa phòng ?
+				</v-card-title>
+				<v-card-actions>
+					<v-spacer></v-spacer>
+
+					<v-btn
+						class="btn-unaction"
+						text
+						@click="dialogDelete = false"
+					>
+						Không
+					</v-btn>
+
+					<v-btn class="btn-action" text @click="deleteRoom()">
+						Đồng ý
+					</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
 	</div>
 </template>
 
@@ -90,10 +121,14 @@ export default {
 				{ text: "Số thành viên", value: "count" },
 				{ text: "Ngày tạo", value: "date" },
 				{ text: "Thành viên", value: "members" },
+				{ text: "Xóa phòng", value: "delete" },
 			],
 			desserts: [],
 			dialog: false,
 			items: [],
+			room_id: null,
+			dialogDelete: false,
+			search: "",
 		};
 	},
 	created() {
@@ -124,6 +159,7 @@ export default {
 			}
 		},
 		seeMembers: function(id) {
+			this.items = [];
 			for (const room of this.ad_rooms.rooms) {
 				for (const member of room.member) {
 					if (id === room.id) {
@@ -137,9 +173,60 @@ export default {
 			}
 			this.dialog = true;
 		},
+		deleteRoomInfo: function(room_id) {
+			this.room_id = room_id;
+			this.dialogDelete = true;
+		},
+		deleteRoom: function() {
+			this.$store.dispatch("ad_deleteRoom", this.room_id);
+			this.dialogDelete = false;
+		},
 	},
 	computed: {
 		...mapGetters(["ad_rooms"]),
+		filterdesserts() {
+			return this.desserts.filter((item) => {
+				return item.room_name
+					.toLowerCase()
+					.includes(this.search.toLowerCase());
+			});
+		},
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+.search-wrapper {
+	position: relative;
+	padding: 20px;
+	label {
+		position: absolute;
+		font-size: 12px;
+		color: rgba(0, 0, 0, 0.5);
+		top: 8px;
+		left: 12px;
+		z-index: -1;
+		transition: 0.15s all ease-in-out;
+	}
+	input {
+		padding: 4px 12px;
+		color: rgba(0, 0, 0, 0.7);
+		border: 1px solid rgba(0, 0, 0, 0.12);
+		transition: 0.15s all ease-in-out;
+		background: white;
+		&:focus {
+			outline: none;
+			transform: scale(1.05);
+			& + label {
+				font-size: 10px;
+				transform: translateY(-24px) translateX(-12px);
+			}
+		}
+		&::-webkit-input-placeholder {
+			font-size: 12px;
+			color: rgba(0, 0, 0, 0.5);
+			font-weight: 100;
+		}
+	}
+}
+</style>

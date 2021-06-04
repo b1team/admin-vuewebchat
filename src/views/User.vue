@@ -2,11 +2,24 @@
 	<div>
 		<v-app id="inspire">
 			<h2 style="padding: 10px;">Danh sách người dùng</h2>
-			<user-table :headers="headers" :desserts="desserts" />
+			<div class="search-wrapper">
+				Tìm kiếm:
+				<input
+					type="text"
+					v-model="search"
+					placeholder="Tên người dùng"
+				/>
+			</div>
+			<user-table :headers="headers" :desserts="filterdesserts" />
 			<v-divider></v-divider>
 
 			<h2 style="padding: 10px;">Tạo người dùng mới</h2>
-			<v-form class="form t-color" ref="form" v-model="valid" lazy-validation>
+			<v-form
+				class="form t-color"
+				ref="form"
+				v-model="valid"
+				lazy-validation
+			>
 				<v-text-field
 					v-model="user.username"
 					:rules="[rules.required]"
@@ -78,6 +91,7 @@ export default {
 				{ text: "Ảnh đại diện", value: "avatar" },
 				{ text: "Hoạt động", value: "active" },
 				{ text: "Ngày tạo", value: "date" },
+				{ text: "Xóa người dùng", value: "delete" },
 			],
 			desserts: [],
 			valid: true,
@@ -96,6 +110,7 @@ export default {
 				required: (value) => !!value || "Không được bỏ trống",
 				min: (v) => (v && v.length >= 8) || "Có ít nhất 8 ký tự",
 			},
+			search: "",
 		};
 	},
 	created() {
@@ -148,13 +163,54 @@ export default {
 			return () =>
 				this.user.password === this.verify || "Mật khẩu phải chính xác";
 		},
+		filterdesserts() {
+			return this.desserts.filter((item) => {
+				return item.username
+					.toLowerCase()
+					.includes(this.search.toLowerCase());
+			});
+		},
 	},
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .form {
 	padding: 20px 20px;
 	border-style: groove;
+}
+
+.search-wrapper {
+	position: relative;
+	padding: 20px;
+	label {
+		position: absolute;
+		font-size: 12px;
+		color: rgba(0, 0, 0, 0.5);
+		top: 8px;
+		left: 12px;
+		z-index: -1;
+		transition: 0.15s all ease-in-out;
+	}
+	input {
+		padding: 4px 12px;
+		color: rgba(0, 0, 0, 0.7);
+		border: 1px solid rgba(0, 0, 0, 0.12);
+		transition: 0.15s all ease-in-out;
+		background: white;
+		&:focus {
+			outline: none;
+			transform: scale(1.05);
+			& + label {
+				font-size: 10px;
+				transform: translateY(-24px) translateX(-12px);
+			}
+		}
+		&::-webkit-input-placeholder {
+			font-size: 12px;
+			color: rgba(0, 0, 0, 0.5);
+			font-weight: 100;
+		}
+	}
 }
 </style>
