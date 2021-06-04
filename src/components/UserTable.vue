@@ -34,7 +34,7 @@
 				</v-chip>
 			</template>
 			<template v-slot:item.delete="{ item }">
-				<v-icon small class="mr-2" @click="deleteUserInfo(item.id)">
+				<v-icon small class="mr-2" @click="deleteUserInfo(item)">
 					mdi-delete
 				</v-icon>
 			</template>
@@ -56,7 +56,7 @@
 						Không
 					</v-btn>
 
-					<v-btn class="btn-action" text @click="deleteUser()">
+					<v-btn class="btn-action" text @click="deleteUser">
 						Đồng ý
 					</v-btn>
 				</v-card-actions>
@@ -73,15 +73,26 @@ export default {
 		return {
 			dialogDelete: false,
 			user_id: null,
+			index: null,
 		}
 	},
 	methods:{
-		deleteUserInfo: function(id) {
-			this.user_id = id;
+		deleteUserInfo: function(item) {
+			this.user_id = item.id;
+			this.index = item.index;
 			this.dialogDelete = true;
 		},
 		deleteUser: function(){
-			this.$store.dispatch("ad_deleteUser", this.user_id)
+			const user_id = this.user_id;
+			this.$store.dispatch("ad_deleteUser", user_id)
+			.then((response) =>{
+				if (response.name === "Error"){
+					console.log(response)
+					return
+				}
+				const index = this.index;
+				this.$emit("filterUserData", { index })
+			})
 			this.dialogDelete = false;
 		}
 	}

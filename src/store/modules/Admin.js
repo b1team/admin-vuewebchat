@@ -88,7 +88,7 @@ const actions = {
 		return new Promise((resolve, reject) => {
 			axios({
 				method: "delete",
-				url: "admin/user?user_id" + user_id,
+				url: "admin/user?user_id=" + user_id,
 				headers: {
 					Authorization: "Bearer " + localStorage.getItem("token"),
 				}

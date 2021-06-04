@@ -37,7 +37,7 @@
 				</v-icon>
 			</template>
 			<template v-slot:item.delete="{ item }">
-				<v-icon small class="mr-2" @click="deleteRoomInfo(item.id)">
+				<v-icon small class="mr-2" @click="deleteRoomInfo(item)">
 					mdi-delete
 				</v-icon>
 			</template>
@@ -96,7 +96,7 @@
 						Không
 					</v-btn>
 
-					<v-btn class="btn-action" text @click="deleteRoom()">
+					<v-btn class="btn-action" text @click="deleteRoom">
 						Đồng ý
 					</v-btn>
 				</v-card-actions>
@@ -129,6 +129,8 @@ export default {
 			room_id: null,
 			dialogDelete: false,
 			search: "",
+			index: 0,
+			deteleIndex: null
 		};
 	},
 	created() {
@@ -139,6 +141,7 @@ export default {
 			for (const room of this.ad_rooms.rooms) {
 				const info = {
 					id: room.id,
+					index: this.index,
 					room_name: room.room_name,
 					type: room.type,
 					avatar: room.avatar,
@@ -147,6 +150,7 @@ export default {
 				};
 
 				this.desserts.push(info);
+				this.index++;
 			}
 			this.rooms = this.ad_rooms;
 		},
@@ -173,12 +177,14 @@ export default {
 			}
 			this.dialog = true;
 		},
-		deleteRoomInfo: function(room_id) {
-			this.room_id = room_id;
+		deleteRoomInfo: function(item) {
+			this.room_id = item.id;
+			this.deteleIndex = item.index;
 			this.dialogDelete = true;
 		},
 		deleteRoom: function() {
 			this.$store.dispatch("ad_deleteRoom", this.room_id);
+			this.desserts.splice(this.deleteIndex, 1);
 			this.dialogDelete = false;
 		},
 	},

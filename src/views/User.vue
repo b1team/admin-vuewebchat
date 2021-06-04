@@ -10,7 +10,11 @@
 					placeholder="Tên người dùng"
 				/>
 			</div>
-			<user-table :headers="headers" :desserts="filterdesserts" />
+			<user-table
+				:headers="headers"
+				:desserts="filterdesserts"
+				@filterUserData="filterUserData"
+			/>
 			<v-divider></v-divider>
 
 			<h2 style="padding: 10px;">Tạo người dùng mới</h2>
@@ -56,6 +60,7 @@
 					label="Nhập lại mật khẩu"
 					counter
 					@click:append="show1 = !show1"
+					@keyup.enter="validate"
 				></v-text-field>
 
 				<v-btn
@@ -111,6 +116,7 @@ export default {
 				min: (v) => (v && v.length >= 8) || "Có ít nhất 8 ký tự",
 			},
 			search: "",
+			index: 0
 		};
 	},
 	created() {
@@ -121,6 +127,7 @@ export default {
 			for (const data of this.ad_users.users) {
 				const info = {
 					id: data.user_id,
+					index: this.index,
 					username: data.username,
 					name: data.name,
 					avatar: data.avatar,
@@ -128,6 +135,7 @@ export default {
 					date: new Date(data.created_at).toLocaleDateString("en-GB"),
 				};
 				this.desserts.push(info);
+				this.index++;
 			}
 		},
 		validate() {
@@ -139,6 +147,7 @@ export default {
 						let data = response.data;
 						const info = {
 							id: data.user_id,
+							index: this.index + 1,
 							username: data.username,
 							name: data.name,
 							avatar: data.avatar,
@@ -155,6 +164,10 @@ export default {
 		},
 		reset() {
 			this.$refs.form.reset();
+		},
+		filterUserData({ index }) {
+			console.log(index);
+			this.desserts.splice(index, 1);
 		},
 	},
 	computed: {
