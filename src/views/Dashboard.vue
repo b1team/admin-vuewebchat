@@ -54,7 +54,7 @@
 								class="ma-2 btn-action"
 								outlined
 							>
-								{{ chat.active ? "Active" : "Disabled" }}
+								{{ chat.active ? "Chặn" : "Bỏ chặn" }}
 							</v-btn>
 						</v-list-item-icon>
 						<v-dialog v-model="dialogActive" max-width="290">
