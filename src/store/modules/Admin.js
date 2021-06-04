@@ -26,6 +26,9 @@ const actions = {
 			axios({
 				method: "get",
 				url: "admin/user/all",
+				headers: {
+					Authorization: "Bearer " + localStorage.getItem("token"),
+				},
 			})
 				.then((response) => {
 					let data = response.data;
@@ -46,6 +49,9 @@ const actions = {
 				method: "post",
 				url: "admin/user",
 				data: user,
+				headers: {
+					Authorization: "Bearer " + localStorage.getItem("token"),
+				},
 			})
 				.then((response) => {
 					commit("success");
@@ -63,6 +69,9 @@ const actions = {
 			axios({
 				method: "put",
 				url: "admin/user?user_id=" + user_id,
+				headers: {
+					Authorization: "Bearer " + localStorage.getItem("token"),
+				},
 			})
 				.then((response) => {
 					commit("success");
@@ -73,6 +82,26 @@ const actions = {
 					reject(error);
 				});
 		});
+	},
+
+	ad_deleteUser({ commit }, user_id) {
+		return new Promise((resolve, reject) => {
+			axios({
+				method: "delete",
+				url: "admin/user?user_id" + user_id,
+				headers: {
+					Authorization: "Bearer " + localStorage.getItem("token"),
+				}
+			})
+			.then((response) => {
+				commit("success");
+				resolve(response);
+			})
+			.catch((err) => {
+				console.log("DELETE USER ERROR: ", err);
+				reject(err);
+			})
+		})
 	},
 
 	ad_createRoom({ commit }, roomName) {
@@ -100,6 +129,9 @@ const actions = {
 			axios({
 				method: "get",
 				url: "admin/rooms/all",
+				headers: {
+					Authorization: "Bearer " + localStorage.getItem("token"),
+				},
 			})
 				.then((response) => {
 					let data = response.data;
@@ -118,6 +150,9 @@ const actions = {
 			axios({
 				method: "delete",
 				url: "admin/rooms?room_id=" + room_id,
+				headers: {
+					Authorization: "Bearer " + localStorage.getItem("token"),
+				},
 			})
 				.then((response) => {
 					commit("success");
@@ -136,6 +171,9 @@ const actions = {
 				method: "get",
 				url: "admin/messages/all",
 				data: time,
+				headers: {
+					Authorization: "Bearer " + localStorage.getItem("token"),
+				},
 			})
 				.then((response) => {
 					let data = response.data;
