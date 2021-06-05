@@ -10,7 +10,4 @@ services:
             - .env
         ports: 
             - "10000:80"
-        volumes:
-            - "/app/node_modules"
-            - ".:/app"
         restart: unless-stopped
