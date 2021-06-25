@@ -28,7 +28,7 @@
 		<v-row>
 			<v-col cols="12" sm="6" md="6">
 				<v-list subheader class="table">
-					<v-subheader><h2>Người dùng</h2></v-subheader>
+					<v-subheader><h2>Người dùng mới nhất</h2></v-subheader>
 
 					<v-list-item
 						class="t-color"
@@ -94,11 +94,11 @@
 			</v-col>
 			<v-col cols="12" sm="6" md="6">
 				<v-list subheader class="table">
-					<v-subheader><h2>Phòng</h2></v-subheader>
+					<v-subheader><h2>Phòng mới nhất</h2></v-subheader>
 
 					<v-list-item
 						class="t-color"
-						v-for="room in rooms.rooms"
+						v-for="room in rooms.five_rooms"
 						:key="room.id"
 					>
 						<v-list-item-avatar>
@@ -106,6 +106,7 @@
 								v-if="room.avatar"
 								:alt="`${room.room_name} avatar`"
 								:src="room.avatar"
+								@error="room.avatar=''"
 							></v-img>
 							<v-avatar
 								v-if="!room.avatar"
@@ -216,7 +217,7 @@ export default {
 					};
 					this.info.push(data);
 
-					for (const user of this.users.users) {
+					for (const user of this.users.five_users) {
 						const info = {
 							active: user.active,
 							avatar: user.avatar,
