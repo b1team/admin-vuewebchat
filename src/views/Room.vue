@@ -3,7 +3,7 @@
 		<h1 style="padding: 10px;">Danh sách phòng</h1>
 		<div class="search-wrapper">
 			Tìm kiếm: 
-			<input type="text" v-model="search" placeholder="Tên người dùng" />
+			<input type="text" v-model="search" placeholder="Tên phòng" />
 		</div>
 		<v-data-table
 			:headers="headers"
@@ -28,6 +28,7 @@
 				<img
 					v-if="item.avatar"
 					:src="item.avatar"
+					@error="item.avatar=''"
 					style="width: 35px; height: 35px;"
 				/>
 			</template>
