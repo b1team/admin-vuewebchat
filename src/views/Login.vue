@@ -92,12 +92,9 @@ export default {
 					username: this.user.loginUsername,
 					password: this.user.loginPassword,
 				};
-				this.$store
-					.dispatch("login", user)
-					.then(() => {
+				this.$store.dispatch("login", user).then(() => {
 						this.$router.push("/");
-					})
-					.catch((err) => console.log("LOGIN ERROR", err));
+					}).catch((err) => console.log("LOGIN ERROR", err));
 				this.login = true;
 			}
 		},

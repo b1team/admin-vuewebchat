@@ -106,7 +106,7 @@
 								v-if="room.avatar"
 								:alt="`${room.room_name} avatar`"
 								:src="room.avatar"
-								@error="room.avatar=''"
+								@error="room.avatar = ''"
 							></v-img>
 							<v-avatar
 								v-if="!room.avatar"
@@ -206,52 +206,46 @@ export default {
 			});
 		},
 		loadUsers: function() {
-			this.$store
-				.dispatch("ad_loadUsers")
-				.then(() => {
-					this.users = this.$store.getters.ad_users;
-					const data = {
-						detail: "Người dùng",
-						count: this.users.count,
-						icon: "mdi-account-circle",
-					};
-					this.info.push(data);
+			this.$store.dispatch("ad_loadUsers").then(() => {
+				this.users = this.$store.getters.ad_users;
+				const data = {
+					detail: "Người dùng",
+					count: this.users.count,
+					icon: "mdi-account-circle",
+				};
+				this.info.push(data);
 
-					for (const user of this.users.five_users) {
-						const info = {
-							active: user.active,
-							avatar: user.avatar,
-							title: user.username,
-							id: user.user_id,
-						};
-						this.recent.push(info);
-					}
-				})
+				for (const user of this.users.five_users) {
+					const info = {
+						active: user.active,
+						avatar: user.avatar,
+						title: user.username,
+						id: user.user_id,
+					};
+					this.recent.push(info);
+				}
+			});
 		},
 		messagesCount: function() {
-			this.$store
-				.dispatch("ad_messagesCount")
-				.then(() => {
-					const data = {
-						detail: "Tin nhắn",
-						count: this.$store.getters.ad_messages.messages,
-						icon: "mdi-message",
-					};
-					this.info.push(data);
-				})
+			this.$store.dispatch("ad_messagesCount").then(() => {
+				const data = {
+					detail: "Tin nhắn",
+					count: this.$store.getters.ad_messages.messages,
+					icon: "mdi-message",
+				};
+				this.info.push(data);
+			});
 		},
 		loadRooms: function() {
-			this.$store
-				.dispatch("ad_loadRoom")
-				.then(() => {
-					this.rooms = this.$store.getters.ad_rooms;
-					const data = {
-						detail: "Phòng",
-						count: this.rooms.count,
-						icon: "mdi-door",
-					};
-					this.info.push(data);
-				})
+			this.$store.dispatch("ad_loadRoom").then(() => {
+				this.rooms = this.$store.getters.ad_rooms;
+				const data = {
+					detail: "Phòng",
+					count: this.rooms.count,
+					icon: "mdi-door",
+				};
+				this.info.push(data);
+			});
 		},
 		activeUser: function(id) {
 			this.recent.filter(function(data) {
@@ -259,9 +253,7 @@ export default {
 					data.active = !data.active;
 				}
 			});
-			this.$store
-				.dispatch("ad_disableUser", id)
-				.catch((error) => console.log("ACTIVE USER ERROR", error));
+			this.$store.dispatch("ad_disableUser", id).catch((error) => console.log("ACTIVE USER ERROR", error));
 			this.dialogActive = false;
 		},
 		textAvatar(roomName) {
@@ -279,7 +271,7 @@ export default {
 		getUserData() {
 			const token = localStorage.getItem("token");
 			if (token) {
-				this.$store.dispatch("getUser")
+				this.$store.dispatch("getUser");
 			} else {
 				this.logout();
 			}

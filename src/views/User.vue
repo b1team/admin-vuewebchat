@@ -141,9 +141,7 @@ export default {
 		validate() {
 			if (this.$refs.form.validate()) {
 				let data = this.user;
-				this.$store
-					.dispatch("ad_createUser", data)
-					.then((response) => {
+				this.$store.dispatch("ad_createUser", data).then((response) => {
 						let data = response.data;
 						const info = {
 							id: data.user_id,
@@ -158,8 +156,7 @@ export default {
 						};
 						this.desserts.push(info);
 						this.reset();
-					})
-					.catch((error) => console.log(error));
+					}).catch((error) => console.log("CREATE USER ERROR", error));
 			}
 		},
 		reset() {
